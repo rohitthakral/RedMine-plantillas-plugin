@@ -1,4 +1,4 @@
-class CreateWikiTemplatesgs < ActiveRecord::Migration
+class CreateWikiTemplatesgs < ActiveRecord::Migration[6.1]
   def self.up
     create_table :wiki_templatesgs do |t|
       t.column :author_id, :integer

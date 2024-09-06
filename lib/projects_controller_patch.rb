@@ -2,7 +2,9 @@ module ProjectsControllerPatch
     def self.included(base)
     	base.send(:include, InstanceMethods)
 	    base.class_eval do
-	      alias_method_chain :settings, :template
+	      # alias_method_chain :settings, :template
+        alias_method :settings_without_template, :settings
+        alias_method :settings, :settings_with_template
 	    end
     end
 module InstanceMethods

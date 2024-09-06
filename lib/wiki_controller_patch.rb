@@ -2,9 +2,18 @@ module WikiControllerPatch
     def self.included(base)
     	base.send(:include, InstanceMethods)
 	    base.class_eval do
-	      alias_method_chain :edit, :template
-          alias_method_chain :show, :template
-	      alias_method_chain :preview, :template
+	      # alias_method_chain :edit, :template
+        # alias_method_chain :show, :template
+	      # alias_method_chain :preview, :template
+
+	      alias_method :edit_without_template, :edit
+        alias_method :edit, :edit_with_template
+
+        alias_method :show_without_template, :show
+        alias_method :show, :show_with_template
+
+        alias_method :preview_without_template, :preview
+        alias_method :preview, :preview_with_template
 	    end
     end
 	module InstanceMethods

@@ -2,7 +2,8 @@ module ProjectsHelperPatch
     def self.included(base)
     	base.send(:include, InstanceMethods)
 	    base.class_eval do
-	      alias_method_chain :project_settings_tabs, :template
+        alias_method :project_settings_tabs_without_template, :project_settings_tabs
+        alias_method :project_settings_tabs, :project_settings_tabs_with_template
 	    end
     end
 

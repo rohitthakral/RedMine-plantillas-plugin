@@ -1,29 +1,29 @@
 require 'redmine'
 
 # Including dispatcher.rb in case of Rails 2.x
-require 'dispatcher' unless Rails::VERSION::MAJOR >= 3
+# require 'dispatcher' unless Rails::VERSION::MAJOR >= 3
 
-if Rails::VERSION::MAJOR >= 3
-	ActionDispatch::Callbacks.to_prepare do
-		# use require_dependency if you plan to utilize development mode
-		require_dependency 'wiki_controller'
-	  WikiController.send(:include, WikiControllerPatch)
-	  require_dependency 'projects_helper'
-	  ProjectsHelper.send(:include, ProjectsHelperPatch)
-	  require_dependency 'projects_controller'
-	  ProjectsController.send(:include, ProjectsControllerPatch)
-	end
-else
-	Dispatcher.to_prepare :redmine_gsc_plantillas do
-	  require_dependency 'wiki_controller'
-	  WikiController.send(:include, WikiControllerPatch)
-	  require_dependency 'projects_helper'
-	  ProjectsHelper.send(:include, ProjectsHelperPatch)
-	  require_dependency 'projects_controller'
-	  ProjectsController.send(:include, ProjectsControllerPatch)
-	end
-end
-
+# if Rails::VERSION::MAJOR >= 3
+# 	ActionDispatch::Callbacks.to_prepare do
+# 		# use require_dependency if you plan to utilize development mode
+# 		require_dependency 'wiki_controller'
+# 	  WikiController.send(:include, WikiControllerPatch)
+# 	  require_dependency 'projects_helper'
+# 	  ProjectsHelper.send(:include, ProjectsHelperPatch)
+# 	  require_dependency 'projects_controller'
+# 	  ProjectsController.send(:include, ProjectsControllerPatch)
+# 	end
+# else
+# 	Dispatcher.to_prepare :redmine_gsc_plantillas do
+# 	  require_dependency 'wiki_controller'
+# 	  WikiController.send(:include, WikiControllerPatch)
+# 	  require_dependency 'projects_helper'
+# 	  ProjectsHelper.send(:include, ProjectsHelperPatch)
+# 	  require_dependency 'projects_controller'
+# 	  ProjectsController.send(:include, ProjectsControllerPatch)
+# 	end
+# end
+$LOAD_PATH.unshift "#{File.dirname(__FILE__)}/lib/"
 Redmine::Plugin.register :redmine_gsc_plantillas do
   name 'Redmine Gsc Plantillas plugin'
   author 'Marta Gonzalez de Chaves Aguilera'
@@ -38,6 +38,13 @@ Redmine::Plugin.register :redmine_gsc_plantillas do
 	permission :edit_templates, :templates => [:edit, :find_project]
   end
   menu :admin_menu, :templatesg, { :controller => 'templatesg', :action => 'index' }, :caption => :app_menu_global_templates
+
+  require_dependency 'wiki_controller'
+	WikiController.send(:include, WikiControllerPatch)
+	require_dependency 'projects_helper'
+	ProjectsHelper.send(:include, ProjectsHelperPatch)
+	require_dependency 'projects_controller'
+	ProjectsController.send(:include, ProjectsControllerPatch)
 
 end
 

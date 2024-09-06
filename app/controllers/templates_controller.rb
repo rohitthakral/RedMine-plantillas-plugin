@@ -2,7 +2,7 @@ class TemplatesController < ApplicationController
   unloadable
   menu_item :settings
   model_object WikiTemplates
-  before_filter :find_project, :authorize , :only => [:new, :edit, :destroy]
+  before_action :find_project, :authorize , :only => [:new, :edit, :destroy]
  
 
 

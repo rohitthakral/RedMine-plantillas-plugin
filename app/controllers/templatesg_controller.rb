@@ -3,17 +3,17 @@ class TemplatesgController < ApplicationController
   model_object WikiTemplatesg
   layout 'admin'
   
-  before_filter :require_admin
+  before_action :require_admin
 
   def index
-@templates = WikiTemplatesg.find(:all)
+@templates = WikiTemplatesg.all
     render :action => "index", :layout => false if request.xhr?
   end
 
   def new
     #if  User.current.allowed_to?(:create_templates, @project) && request.post?
+    @mitemplate = WikiTemplatesg.new
     if request.post?
-      @mitemplate = WikiTemplatesg.new
       @mitemplate.text = params[:mitemplate][:text]
       @mitemplate.name = params[:mitemplate][:name]
       @mitemplate.author_id = User.current
