@@ -1,32 +1,48 @@
-class Mychildtree < ActiveRecord::Base
- def self.columns() @columns ||= []; end  
+class Mychildtree
+
+  include ActiveModel::Validations
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
+
+  def initialize(attributes = {})
+    attributes.each do |name, value|
+      send("#{name}=", value)
+    end
+  end
+
+  def persisted?
+    false
+  end
+
+  def self.columns() @columns ||= []; end  
   
   def self.column(name, sql_type = nil, default = nil, null = true)  
     columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)  
   end  
-     include Enumerable
+  
+  include Enumerable
 
-    attr_accessor :content, :name, :parent
+  attr_accessor :content, :name, :parent
 
-    def parent=(parent)
-      @parent = parent
-    end
+  def parent=(parent)
+    @parent = parent
+  end
 
 
-    def parentage
-      parentageArray = []
-      prevParent = self.parent
-      while (prevParent)
-        parentageArray << prevParent
-	@parentsproject = Project.find(prevParent)
-	if @parentsproject!=nil
-	        prevParent = @parentsproject.parent_id
-	else
-		prevParent = nil	
-      	end
-      end	
-      parentageArray
-    end
+  def parentage
+    parentageArray = []
+    prevParent = self.parent
+    while (prevParent)
+      parentageArray << prevParent
+	    @parentsproject = Project.find(prevParent)
+	    if @parentsproject!=nil
+	      prevParent = @parentsproject.parent_id
+	    else
+		    prevParent = nil	
+      end
+    end	
+    parentageArray
+  end
 
 
 end

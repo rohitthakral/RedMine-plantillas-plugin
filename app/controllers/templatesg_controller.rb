@@ -6,7 +6,7 @@ class TemplatesgController < ApplicationController
   before_action :require_admin
 
   def index
-@templates = WikiTemplatesg.all
+    @templates = WikiTemplatesg.all
     render :action => "index", :layout => false if request.xhr?
   end
 

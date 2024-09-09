@@ -9,13 +9,14 @@ module ProjectsControllerPatch
     end
 module InstanceMethods
   def settings_with_template 
-    @issue_custom_fields = IssueCustomField.find(:all, :order => "#{CustomField.table_name}.position")
+    @issue_custom_fields = IssueCustomField.all.order("#{CustomField.table_name}.position")
     @issue_category ||= IssueCategory.new
     @member ||= @project.members.new
     @trackers = Tracker.all
+    @versions = Version.all
     @wiki ||= @project.wiki
     @project_id = @project.id
-    @templates = WikiTemplates.find(:all,:conditions => ["project_id = ? " , @project_id ])
+    @templates = WikiTemplates.where("project_id = ? " , @project_id)
   end
 end
 end

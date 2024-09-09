@@ -69,12 +69,13 @@ module WikiControllerPatch
  		if @page.new_record?
 			if @project.enabled_module_names.include?('templates')
 				if User.current.allowed_to?(:edit_wiki_pages, @project) && editable?
-					@templates = WikiTemplates.find(:all,:conditions => ["project_id = ? " , @project_id ])
-					@templatesg = WikiTemplatesg.find(:all)
+					@templates = WikiTemplates.where("project_id = ? " , @project_id )
+					@template = @templates.last
+					@templatesg = WikiTemplatesg.all
 					@miproject = Project.find(params[:project_id])
 					mychildrentree = Mychildtree.new
 				                mychildrentree.parent = @miproject.parent_id
-					@templatesg = WikiTemplatesg.find(:all)
+					@templatesg = WikiTemplatesg.all
 					@myfamily = mychildrentree.parentage
 					listprojects_id = ''
 					for i in 0..@myfamily.length-1
@@ -85,7 +86,7 @@ module WikiControllerPatch
 					end
 					if listprojects_id
 
- 					@templatesf = WikiTemplates.find(:all,:conditions => "project_id in (" + listprojects_id + ") and visible_children is true ")
+ 					@templatesf = WikiTemplates.where("project_id in (" + listprojects_id + ") and visible_children is true ")
 					end
 					render 'eligeplantilla'
 				else
@@ -154,7 +155,7 @@ module WikiControllerPatch
 			@attachements = page.attachments
 			@previewed = page.content
 		 end
-		 @text = params[:content][:text]
+		 @text = params[:text]
 	  end
 	 render :partial => 'common/preview'
 	end

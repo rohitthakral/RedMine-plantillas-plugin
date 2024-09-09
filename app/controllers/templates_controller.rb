@@ -12,8 +12,8 @@ class TemplatesController < ApplicationController
 
   def new
     #if  User.current.allowed_to?(:create_templates, @project) && request.post?
+    @mitemplate = WikiTemplates.new
     if request.post?
-      @mitemplate = WikiTemplates.new
       @mitemplate.text = params[:mitemplate][:text]
       @mitemplate.name = params[:mitemplate][:name]
       @mitemplate.visible_children = params[:mitemplate][:visible_children]
@@ -36,9 +36,9 @@ class TemplatesController < ApplicationController
   end
 
   def edit
+    @mitemplate = WikiTemplates.find(params[:id])
     if request.post?
     #if User.current.allowed_to?(:edit_templates, @project) && request.post?
-      @mitemplate = WikiTemplates.find(params[:id])
       @mitemplate.text = params[:mitemplate][:text]
       @mitemplate.name = params[:mitemplate][:name]
       @mitemplate.visible_children = params[:mitemplate][:visible_children]

@@ -33,8 +33,7 @@
 </div>
 
 <p><%= submit_tag l(:button_save) %>
-   <%= preview_link({:controller => 'wiki', :action => 'preview', :project_id => @project, :id => @page.title }, 'wiki_form') %></p>
-<%= wikitoolbar_for 'content_text' %>
+<%= wikitoolbar_for 'content_text', preview_project_wiki_page_path(:project_id => @project, :id => @page.title) %>
 <% end %>
 
 <div id="preview" class="wiki"></div>
