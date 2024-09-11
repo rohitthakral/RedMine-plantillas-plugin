@@ -95,6 +95,27 @@ module WikiControllerPatch
 			else
 				if User.current.allowed_to?(:edit_wiki_pages, @project) && editable?
 			        #edit
+			        if @page.new_record?
+					      if params[:parent].present?
+					        @page.parent = @page.wiki.find_page(params[:parent].to_s)
+					      end
+					    end
+
+					    @content = @page.content_for_version(params[:version])
+					    @content ||= WikiContent.new(:page => @page)
+					    @content.text = initial_page_content(@page) if @content.text.blank?
+					    # don't keep previous comment
+					    @content.comments = nil
+
+					    # To prevent StaleObjectError exception when reverting to a previous version
+					    @content.version = @page.content.version if @page.content
+
+					    @text = @content.text
+					    if params[:section].present? && Redmine::WikiFormatting.supports_section_edit?
+					      @section = params[:section].to_i
+					      @text, @section_hash = Redmine::WikiFormatting.formatter.new(@text).get_section(@section)
+					      render_404 if @text.blank?
+					    end
 			        render :action => 'my_edit'
 			    else
 			        render_404
