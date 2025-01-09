@@ -13,7 +13,9 @@ module InstanceMethods
     @issue_category ||= IssueCategory.new
     @member ||= @project.members.new
     @trackers = Tracker.all
-    @versions = Version.all
+    @version_status = params[:version_status] || 'open'
+    @version_name = params[:version_name]
+    @versions = @project.shared_versions.status(@version_status).like(@version_name).sorted
     @wiki ||= @project.wiki
     @project_id = @project.id
     @templates = WikiTemplates.where("project_id = ? " , @project_id)
